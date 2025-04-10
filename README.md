@@ -28,8 +28,8 @@
 ### Installation  
 1. Clone the repo:  
    ```sh
-   git clone https://github.com/Abhishek-B-R/deployr.git
-   cd deployr
+   git clone https://github.com/Abhishek-B-R/Deployr.git
+   cd Deployr
 
 2. Install dependencies:
     ```sh
