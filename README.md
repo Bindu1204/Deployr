@@ -35,6 +35,10 @@
     ```sh
     pnpm install # install all dependencies
 
+3. Copy env files
+    ```sh
+    cp apps/frontend/.env.example apps/frontend/.env
+
 3. Start the development servers:
     ```sh
     pnpm dev  # Runs frontend & backend
