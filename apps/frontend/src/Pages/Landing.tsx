@@ -10,7 +10,7 @@ interface Repository {
 }
 
 export default function Landing() {
-  const [accessOption, setAccessOption] = useState("select");
+  const [accessOption, setAccessOption] = useState("all");
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [selectedRepos, setSelectedRepos] = useState<number[]>([]);
   const [projectName, setProjectName] = useState("");
@@ -23,25 +23,20 @@ export default function Landing() {
     if (user?.username) {
       const fetchRepositories = async () => {
         try {
-          const response = await fetch(
-            `https://api.github.com/users/${user.username}/repos`
-          );
+          const response = await fetch(`https://api.github.com/users/${user.username}/repos`);
           const data = await response.json();
           setRepositories(data);
         } catch (error) {
           console.error("Error fetching repositories:", error);
         }
       };
-
       fetchRepositories();
     }
   }, [user]);
 
   const handleInstall = () => {
     const selectedRepoNames = repositories
-      .filter(
-        (repo) => accessOption === "all" || selectedRepos.includes(repo.id)
-      )
+      .filter((repo) => accessOption === "all" || selectedRepos.includes(repo.id))
       .map((repo) => repo.name);
 
     if (!projectName || !team) {
@@ -67,8 +62,7 @@ export default function Landing() {
   return (
     <div className="max-w-2xl mx-auto p-6 border rounded-md shadow-md bg-white space-y-6">
       <h2 className="text-xl font-semibold">
-        Install on your personal account{" "}
-        <span className="font-bold">{userName}</span>
+        Install on your personal account <span className="font-bold">{userName}</span>
       </h2>
 
       {/* Repo Access Options */}
@@ -87,8 +81,7 @@ export default function Landing() {
             <div>
               <p className="font-medium">All repositories</p>
               <p className="text-sm text-gray-600">
-                This applies to all current and future repositories owned by the
-                resource owner.
+                Applies to all current and future repositories owned by you. Also includes public repositories (read-only).
               </p>
             </div>
           </label>
@@ -105,57 +98,39 @@ export default function Landing() {
             <div>
               <p className="font-medium">Only select repositories</p>
               <p className="text-sm text-gray-600">
-                Select at least one repository. Public repos included
-                (read-only).
+                Select at least one repository. Also includes public repositories (read-only).
               </p>
             </div>
           </label>
         </div>
       </div>
 
-      {/* Repo Selector (Only when "select" option is chosen) */}
+      {/* Repo Selector */}
       {accessOption === "select" && (
-        <>
-          <div className="mt-4 border rounded p-4 bg-gray-50">
-            <label htmlFor="repo-select" className="block font-medium mb-2">
-              Choose a repository from dropdown:
-            </label>
-            <select
-              id="repo-select"
-              onChange={(e) => {
-                const selectedId = parseInt(e.target.value);
-                if (!isNaN(selectedId)) {
-                  setSelectedRepos([selectedId]);
-                }
-              }}
-              value={selectedRepos[0] || ""}
-              className="w-full p-2 border rounded-md"
-            >
-              <option value="" disabled>
-                -- Select a repository --
+        <div className="mt-4 border rounded p-4 bg-gray-50">
+          <label htmlFor="repo-select" className="block font-medium mb-2">
+            Choose a repository from dropdown:
+          </label>
+          <select
+            id="repo-select"
+            onChange={(e) => {
+              const selectedId = parseInt(e.target.value);
+              if (!isNaN(selectedId)) {
+                setSelectedRepos([selectedId]);
+              }
+            }}
+            value={selectedRepos[0] || ""}
+            className="w-full p-2 border rounded-md"
+          >
+            <option value="" disabled>
+              -- Select a repository --
+            </option>
+            {repositories.map((repo) => (
+              <option key={repo.id} value={repo.id}>
+                {repo.name}
               </option>
-              {repositories.map((repo) => (
-                <option key={repo.id} value={repo.id}>
-                  {repo.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </>
-      )}
-
-      {/* Show Import button if either 'all' is selected, or repo selected */}
-      {(accessOption === "all" || selectedRepos.length > 0) && (
-        <div className="mt-4 p-4 bg-white border rounded-md shadow-sm flex items-center justify-between">
-          <div>
-            <p className="font-semibold">
-              {accessOption === "all"
-                ? "All repositories"
-                : repositories.find((r) => r.id === selectedRepos[0])?.name}
-            </p>
-            <p className="text-sm text-gray-500">Ready to import</p>
-          </div>
-          <Button onClick={handleInstall}>Import</Button>
+            ))}
+          </select>
         </div>
       )}
 
@@ -195,16 +170,30 @@ export default function Landing() {
         <p className="font-medium mb-2">with these permissions:</p>
         <ul className="text-sm text-gray-700 space-y-2">
           <li className="flex items-center gap-2">
-            <CheckCircle2 className="text-green-600 w-4 h-4" /> Read access to
-            metadata
+            <CheckCircle2 className="text-green-600 w-4 h-4" />
+            Read access to metadata
           </li>
           <li className="flex items-center gap-2">
             <CheckCircle2 className="text-green-600 w-4 h-4" />
-            Read/write access to administration, checks, code, issues, PRs,
-            hooks, etc.
+            Read/write access to administration, checks, code, issues, PRs, hooks, etc.
           </li>
         </ul>
       </div>
+
+      {/* Install Button */}
+      {(accessOption === "all" || selectedRepos.length > 0) && (
+        <div className="mt-4 p-4 bg-white border rounded-md shadow-sm flex items-center justify-between">
+          <div>
+            <p className="font-semibold">
+              {accessOption === "all"
+                ? "All repositories"
+                : repositories.find((r) => r.id === selectedRepos[0])?.name}
+            </p>
+            <p className="text-sm text-gray-500">Ready to import</p>
+          </div>
+          <Button onClick={handleInstall}>Import</Button>
+        </div>
+      )}
     </div>
   );
 }
