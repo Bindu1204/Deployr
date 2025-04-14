@@ -1,6 +1,8 @@
 import { createClient,commandOptions } from "redis";
 import { copyFinalDist, downloadS3Folder } from "./aws";
 import { buildProject } from "./utils";
+import { deleteAllFilesFromR2 } from "./deleteFilesInS3";
+import path from "path"
 const subscriber=createClient()
 subscriber.connect()
 
@@ -24,6 +26,7 @@ async function  main() {
 
         //insert status in hashset of redis
         publisher.hSet("status",response.element,"deployed")
+        await deleteAllFilesFromR2(path.join("output",response.element))
     }
 }
 main()

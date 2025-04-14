@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc -b && node dist/index.js && rm -r dist"
+    "dev": "tsc -b && node dist/index.js && rm -r dist",
+    "del":"tsc -b && node dist/delete.js"
   },
   "keywords": [],
   "author": "",

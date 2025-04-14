@@ -6,6 +6,7 @@ import path from "path"
 import { getAllFiles } from "./file"
 import { uploadFile } from "./aws"
 import { createClient } from "redis"
+import { deleteAllFiles } from "./delete"
 
 const subscriber=createClient()
 subscriber.connect()
@@ -29,10 +30,13 @@ app.post("/deploy",async (req,res)=>{
     })
 
     await new Promise((resolve) => setTimeout(resolve, 5000))
+
     //push to redis queue
     publisher.lPush("build-queue",id)
     //insert status in hashset of redis
     publisher.hSet("status",id,"uploaded")
+    //delete content of dist/output folder
+    deleteAllFiles(path.join(__dirname,"output",id))
 
     res.json({
         id
