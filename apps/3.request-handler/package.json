@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "3.request-handler",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,10 +13,9 @@
   "dependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
-    "@types/node": "^22.14.0",
+    "aws-sdk": "^2.1692.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
 }
