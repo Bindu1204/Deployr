@@ -1,19 +1,27 @@
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react'
-import { Button } from './ui/button'
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/clerk-react";
+import { Button } from "./ui/button";
+
 export default function UserProfile() {
   return (
-    <header>
+    <header className="flex items-center gap-4 p-4">
       <SignedOut>
-        <Button>
+        <Button asChild>
           <SignInButton />
         </Button>
-        <Button variant={'secondary'}>
+        <Button variant="secondary" asChild>
           <SignUpButton />
         </Button>
       </SignedOut>
+
       <SignedIn>
-        <UserButton />
+        <UserButton afterSignOutUrl="/" />
       </SignedIn>
     </header>
-  )
+  );
 }
