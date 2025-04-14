@@ -1,18 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserComponent from "./components/UserComponent";
 import Landing from "./Pages/Landing";
-import SelectRepo from "./Pages/SelectRepo"; // assuming this is your next page
+import SelectFrameworkPage from "./Pages/SelectFrameworkPage"; // Ensure correct import path
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <Router>
       <div className="bg-slate-950 h-screen w-screen">
         <UserComponent />
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/select-repo" element={<SelectRepo />} />
+
+          <Route path="/select-framework" element={<SelectFrameworkPage />} />
         </Routes>
       </div>
     </Router>
   );
-}
+};
+
+export default App;
